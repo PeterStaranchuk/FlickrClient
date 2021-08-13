@@ -1,4 +1,4 @@
-package com.peterstaranchuk.common.redirectors
+package com.peterstaranchuk.onboarding.ui.splash
 
 import androidx.fragment.app.Fragment
 
