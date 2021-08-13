@@ -12,6 +12,9 @@ import org.koin.core.context.unloadKoinModules
 import androidx.viewpager.widget.PagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.peterstaranchuk.onboarding.R
+import android.graphics.drawable.Drawable
+import androidx.viewpager2.widget.ViewPager2
+
 
 class OnboardingFragment : Fragment() {
 
@@ -32,6 +35,9 @@ class OnboardingFragment : Fragment() {
             titles = resources.getStringArray(R.array.titles),
             descriptions = resources.getStringArray(R.array.descriptions))
 
+        binding.onboardingPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+
+        })
         TabLayoutMediator(binding.tabLayout, binding.onboardingPager){tab, position -> }.attach()
     }
 

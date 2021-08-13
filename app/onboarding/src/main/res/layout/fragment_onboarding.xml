@@ -56,18 +56,17 @@
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/onboarding_indicator_size"
-            android:focusableInTouchMode="false"
-            android:layout_marginTop="@dimen/view_pager_to_indicator_margin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:padding="2dp"
             app:layout_constraintEnd_toEndOf="@+id/guideline_right"
             app:layout_constraintStart_toStartOf="@+id/guideline_left"
             app:layout_constraintTop_toBottomOf="@+id/onboarding_pager"
             app:tabBackground="@drawable/selector_indicator"
             app:tabGravity="center"
             app:tabIndicatorHeight="0dp"
+            app:tabPaddingStart="@dimen/indicator_padding"
+            app:tabPaddingEnd="@dimen/indicator_padding"
             tools:background="@android:color/holo_green_dark" />
 
         <androidx.constraintlayout.widget.Guideline

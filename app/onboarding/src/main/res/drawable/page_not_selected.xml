@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <item
-        android:width="@dimen/onboarding_indicator_size"
-        android:height="@dimen/onboarding_indicator_size"
-        android:end="@dimen/onboarding_indicator_offset"
-        android:start="@dimen/onboarding_indicator_offset">
-        <shape android:shape="rectangle">
-            <solid android:color="@color/onboarding_indicator_not_selected" />
-            <corners android:radius="@dimen/onboarding_indicator_radius" />
-            <size
-                android:width="@dimen/onboarding_indicator_size"
-                android:height="@dimen/onboarding_indicator_size" />
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape
+            android:innerRadius="0dp"
+            android:shape="ring"
+            android:thickness="@dimen/onboarding_indicator_radius"
+            android:useLevel="false">
+            <solid android:color="@color/onboarding_indicator_not_selected"/>
         </shape>
-
     </item>
-
 </layer-list>
