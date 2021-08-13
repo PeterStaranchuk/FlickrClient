@@ -2,4 +2,5 @@
 <resources>
     <color name="flickr_blue">#0063DC</color>
     <color name="flickr_purple">#FF0084</color>
+    <color name="white">#FFFFFF</color>
 </resources>

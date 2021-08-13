@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="onboarding_main_title">flickr</string>
+    <string name="onboarding_main_button_text">Get Started</string>
+</resources>
