@@ -9,6 +9,9 @@ import com.peterstaranchuk.onboarding.databinding.FragmentOnboardingBinding
 import org.koin.android.ext.android.inject
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
+import androidx.viewpager.widget.PagerAdapter
+import com.google.android.material.tabs.TabLayoutMediator
+import com.peterstaranchuk.onboarding.R
 
 class OnboardingFragment : Fragment() {
 
@@ -19,6 +22,17 @@ class OnboardingFragment : Fragment() {
         binding = FragmentOnboardingBinding.inflate(inflater, container, false)
         binding.vm = vm
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.onboardingPager.adapter = OnboardingStatementsAdapter(
+            fragment = this,
+            titles = resources.getStringArray(R.array.titles),
+            descriptions = resources.getStringArray(R.array.descriptions))
+
+        TabLayoutMediator(binding.tabLayout, binding.onboardingPager){tab, position -> }.attach()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

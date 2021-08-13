@@ -2,4 +2,20 @@
 <resources>
     <string name="onboarding_main_title">flickr</string>
     <string name="onboarding_main_button_text">Get Started</string>
+
+    <string-array name="titles">
+        <item>Powerful</item>
+        <item>Organization simplified</item>
+        <item>Keep your memories safe</item>
+        <item>Sharing made easy</item>
+    </string-array>
+
+    <string-array name="descriptions">
+        <item>Save all your photos and videos in one place with Auto-Uploader.</item>
+        <item>Search, edit and organize in seconds.</item>
+        <item>Your uploaded photos stay private until you choose to share them.</item>
+        <item>Share with friends, family, and the world.</item>
+    </string-array>
+
+
 </resources>

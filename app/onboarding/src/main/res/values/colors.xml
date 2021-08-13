@@ -2,4 +2,6 @@
 <resources>
     <color name="onboarding_main_button_border_color">@color/white</color>
     <color name="onboarding_main_button_text_color">@color/white</color>
+    <color name="onboarding_indicator_selected">#FFFFFF</color>
+    <color name="onboarding_indicator_not_selected">#80FFFFFF</color>
 </resources>
