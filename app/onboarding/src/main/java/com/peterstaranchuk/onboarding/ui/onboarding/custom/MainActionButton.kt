@@ -4,6 +4,7 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.Rect
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -31,6 +32,7 @@ class MainActionButton : View, LifecycleObserver {
     private var state = ButtonState.DEFAULT
     private var offset = 0f
     private var isReversePartOfAnimation = false
+    private var textBounds = Rect()
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
@@ -66,7 +68,9 @@ class MainActionButton : View, LifecycleObserver {
                 canvas?.drawLine(measuredWidth.toFloat(), 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), borderPaint)
                 canvas?.drawLine(0f, measuredHeight.toFloat(), measuredWidth.toFloat(), measuredHeight.toFloat(), borderPaint)
                 canvas?.drawLine(0f, 0f, 0f, measuredHeight.toFloat(), borderPaint)
-                canvas?.drawText(buttonText, (measuredWidth - textPaint.measureText(buttonText)) / 2f, (measuredHeight - textPaint.fontMetrics.top) / 2f, textPaint)
+
+                textPaint.getTextBounds(buttonText, 0, buttonText.length, textBounds)
+                canvas?.drawText(buttonText, (measuredWidth - textBounds.width()) / 2f, (measuredHeight + textBounds.height()) / 2f, textPaint)
             }
             ButtonState.LOADING -> {
                 loadingCirclePaint.color = if(isReversePartOfAnimation) loadingPurple else loadingBlue

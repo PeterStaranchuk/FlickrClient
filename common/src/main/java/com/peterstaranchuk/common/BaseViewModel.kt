@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 
 open class BaseViewModel<E : Event> : ViewModel() {
 
-    private val _screenEvent = MutableLiveData<E>()
+    private val _screenEvent = SingleLiveEvent<E>()
 
     val screenEvent: LiveData<E> = _screenEvent
 

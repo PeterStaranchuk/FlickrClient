@@ -34,8 +34,7 @@ class OnboardingFragment : Fragment() {
         setOnboardingStatements()
         viewLifecycleOwner.lifecycle.addObserver(binding.mainAction)
 
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            vm.screenEvent.observe(viewLifecycleOwner, Observer { event ->
+        vm.screenEvent.observe(viewLifecycleOwner, Observer { event ->
                 when (event) {
                     OnboardingContract.Event.EnableLoadingState -> binding.mainAction.setLoadingState()
                     OnboardingContract.Event.RedirectToAccountEnterScreen -> {
@@ -44,7 +43,6 @@ class OnboardingFragment : Fragment() {
                     }
                 }
             })
-        }
     }
 
     private fun setOnboardingStatements() {
