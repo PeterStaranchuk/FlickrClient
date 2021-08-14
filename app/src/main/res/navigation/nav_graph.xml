@@ -15,5 +15,13 @@
     <fragment
         android:id="@+id/onboardingFragment"
         android:name="com.peterstaranchuk.onboarding.ui.onboarding.OnboardingFragment"
-        android:label="OnboardingFragment" />
+        android:label="OnboardingFragment" >
+        <action
+            android:id="@+id/action_onboardingFragment_to_authFragment"
+            app:destination="@id/authFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/authFragment"
+        android:name="com.peterstaranchuk.onboarding.ui.auth.AuthFragment"
+        android:label="AuthFragment" />
 </navigation>

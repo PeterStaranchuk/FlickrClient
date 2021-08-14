@@ -5,19 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.tabs.TabLayoutMediator
 import com.peterstaranchuk.onboarding.R
 import com.peterstaranchuk.onboarding.databinding.FragmentOnboardingBinding
+import com.peterstaranchuk.onboarding.ui.onboarding.statements.OnboardingContract
 import com.peterstaranchuk.onboarding.ui.onboarding.statements.OnboardingStatementsAdapter
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.android.ext.android.inject
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
-
 
 class OnboardingFragment : Fragment() {
 
     private lateinit var binding: FragmentOnboardingBinding
     private val vm: OnboardingViewModel by inject()
+    private val redirector : OnboardingRedirector by inject()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentOnboardingBinding.inflate(inflater, container, false)
@@ -29,6 +33,18 @@ class OnboardingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setOnboardingStatements()
         viewLifecycleOwner.lifecycle.addObserver(binding.mainAction)
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            vm.screenEvent.receiveAsFlow().collectLatest { event ->
+                when (event) {
+                    OnboardingContract.Event.EnableLoadingState -> binding.mainAction.setLoadingState()
+                    OnboardingContract.Event.RedirectToAccountEnterScreen -> {
+                        binding.mainAction.setDefaultState()
+                        redirector.redirectToAuthScreen(this@OnboardingFragment)
+                    }
+                }
+            }
+        }
     }
 
     private fun setOnboardingStatements() {
