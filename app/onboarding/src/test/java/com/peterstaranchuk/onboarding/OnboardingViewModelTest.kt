@@ -64,7 +64,7 @@ class OnboardingViewModelTest {
         vm.onMainActionButtonClicked()
 
         delay(150)
-        assertEquals(OnboardingContract.Event.RedirectToAccountEnterScreen, vm.screenEvent.getOrAwaitValue())
+        assertEquals(OnboardingContract.Event.RedirectToAccountEnterScreen, vm.screenEvent.value)
     }
 
 }

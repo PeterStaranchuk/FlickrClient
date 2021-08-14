@@ -92,6 +92,7 @@ class MainActionButton : View, LifecycleObserver {
         }
     }
 
+    var globalVisibleRect = Rect()
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun connectListener() {
         setOnTouchListener { _, event ->
@@ -105,20 +106,37 @@ class MainActionButton : View, LifecycleObserver {
                 }
 
                 MotionEvent.ACTION_UP -> {
-                    textAlphaAnimator = ValueAnimator.ofInt(textPaint.alpha, 255).apply {
-                        addUpdateListener {
-                            textPaint.alpha = it.animatedValue as Int
-                            invalidate()
-                        }
-                        duration = 700
-                        interpolator = AccelerateInterpolator()
-                        start()
+                    animateToDefaultTextState()
+                    getGlobalVisibleRect(globalVisibleRect)
+                    if(globalVisibleRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
+                        performClick()
                     }
-                    performClick()
+                    true
+                }
+
+                MotionEvent.ACTION_MOVE -> {
+                    getGlobalVisibleRect(globalVisibleRect)
+                    if(!globalVisibleRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
+                        animateToDefaultTextState()
+                    }
                     true
                 }
                 else -> false
             }
+        }
+    }
+
+    private fun animateToDefaultTextState() {
+        if(textAlphaAnimator?.isRunning == true) return //animation is already running. No need to cancel it and start the new one
+
+        textAlphaAnimator = ValueAnimator.ofInt(textPaint.alpha, 255).apply {
+            addUpdateListener {
+                textPaint.alpha = it.animatedValue as Int
+                invalidate()
+            }
+            duration = 400
+            interpolator = AccelerateInterpolator()
+            start()
         }
     }
 
