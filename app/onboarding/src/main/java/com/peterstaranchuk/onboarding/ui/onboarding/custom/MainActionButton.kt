@@ -9,7 +9,9 @@ import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
+import androidx.core.animation.doOnRepeat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
@@ -23,10 +25,30 @@ class MainActionButton : View, LifecycleObserver {
     private val borderColor by lazy { ContextCompat.getColor(context, R.color.onboarding_main_button_border_color) }
     private val textColor by lazy { ContextCompat.getColor(context, R.color.onboarding_main_button_text_color) }
     private val buttonText by lazy { resources.getString(R.string.onboarding_main_button_text) }
-    var textAlphaAnimator: ValueAnimator? = null
+
+    private val loadingCircleSize by lazy { resources.getDimension(R.dimen.loading_circle_size) }
+    private val loadingCircleMargin by lazy { resources.getDimension(R.dimen.loading_circle_margin) }
+
+    private val loadingBlue by lazy { ContextCompat.getColor(context, R.color.flickr_blue) }
+    private val loadingPurple by lazy { ContextCompat.getColor(context, R.color.flickr_purple) }
+
+    private var textAlphaAnimator: ValueAnimator? = null
+    private var state = State.NORMAL
+    private var offset = 0f
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+
+    enum class State {
+        NORMAL,
+        LOADING
+    }
+
+    private val loadingCirclePaint by lazy {
+        Paint().apply {
+            isAntiAlias = true
+        }
+    }
 
     private val textPaint by lazy {
         TextPaint().apply {
@@ -48,22 +70,64 @@ class MainActionButton : View, LifecycleObserver {
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        canvas?.drawLine(0f, 0f, measuredWidth.toFloat(), 0f, borderPaint)
-        canvas?.drawLine(measuredWidth.toFloat(), 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), borderPaint)
-        canvas?.drawLine(0f, measuredHeight.toFloat(), measuredWidth.toFloat(), measuredHeight.toFloat(), borderPaint)
-        canvas?.drawLine(0f, 0f, 0f, measuredHeight.toFloat(), borderPaint)
-        canvas?.drawText(buttonText, (measuredWidth - textPaint.measureText(buttonText)) / 2f, (measuredHeight - textPaint.fontMetrics.top) / 2f, textPaint)
+        when(state) {
+            State.NORMAL -> {
+                canvas?.drawLine(0f, 0f, measuredWidth.toFloat(), 0f, borderPaint)
+                canvas?.drawLine(measuredWidth.toFloat(), 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), borderPaint)
+                canvas?.drawLine(0f, measuredHeight.toFloat(), measuredWidth.toFloat(), measuredHeight.toFloat(), borderPaint)
+                canvas?.drawLine(0f, 0f, 0f, measuredHeight.toFloat(), borderPaint)
+                canvas?.drawText(buttonText, (measuredWidth - textPaint.measureText(buttonText)) / 2f, (measuredHeight - textPaint.fontMetrics.top) / 2f, textPaint)
+            }
+            State.LOADING -> {
+                loadingCirclePaint.color = if(isRevert) loadingPurple else loadingBlue
+                canvas?.drawCircle(
+                    measuredWidth / 2f - loadingCircleSize / 2f - loadingCircleMargin / 2f + offset,
+                    measuredHeight / 2f - loadingCircleSize / 2f,
+                    loadingCircleSize / 2f,
+                    loadingCirclePaint
+                )
+
+                loadingCirclePaint.color = if(isRevert) loadingBlue else loadingPurple
+                canvas?.drawCircle(
+                    measuredWidth / 2f + loadingCircleSize / 2f + loadingCircleMargin / 2f - offset,
+                    measuredHeight / 2f - loadingCircleSize / 2f,
+                    loadingCircleSize / 2f,
+                    loadingCirclePaint
+                )
+            }
+        }
     }
 
+    var isRevert = false
+
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    @SuppressLint("ClickableViewAccessibility")
     fun connectListener() {
         setOnTouchListener { _, event ->
             when (event?.action) {
                 MotionEvent.ACTION_DOWN -> {
                     textAlphaAnimator?.cancel()
                     textPaint.alpha = 64
+                    isClickable = false
                     invalidate()
+
+                    postDelayed({
+                        state = State.LOADING
+                        ValueAnimator.ofFloat(0f, loadingCircleSize + loadingCircleMargin).apply {
+                            addUpdateListener {
+                                offset = it.animatedValue as Float
+                                postInvalidate()
+                            }
+                            doOnRepeat {
+                                isRevert = !isRevert
+                            }
+                            interpolator = AccelerateDecelerateInterpolator()
+                            repeatMode = ValueAnimator.RESTART
+                            repeatCount = ValueAnimator.INFINITE
+                            duration = 1000
+                            start()
+                        }
+                        postInvalidate()
+                    }, 300)
                     true
                 }
 
@@ -77,6 +141,7 @@ class MainActionButton : View, LifecycleObserver {
                         interpolator = AccelerateInterpolator()
                         start()
                     }
+                    performClick()
                     true
                 }
                 else -> false
@@ -85,7 +150,6 @@ class MainActionButton : View, LifecycleObserver {
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    @SuppressLint("ClickableViewAccessibility")
     fun disconnectListener() {
         setOnTouchListener(null)
     }
