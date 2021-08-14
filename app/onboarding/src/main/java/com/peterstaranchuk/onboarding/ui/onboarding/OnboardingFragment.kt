@@ -5,15 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.google.android.material.tabs.TabLayoutMediator
+import com.peterstaranchuk.onboarding.R
 import com.peterstaranchuk.onboarding.databinding.FragmentOnboardingBinding
+import com.peterstaranchuk.onboarding.ui.onboarding.statements.OnboardingStatementsAdapter
 import org.koin.android.ext.android.inject
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
-import androidx.viewpager.widget.PagerAdapter
-import com.google.android.material.tabs.TabLayoutMediator
-import com.peterstaranchuk.onboarding.R
-import android.graphics.drawable.Drawable
-import androidx.viewpager2.widget.ViewPager2
 
 
 class OnboardingFragment : Fragment() {
@@ -29,16 +27,18 @@ class OnboardingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setOnboardingStatements()
+        viewLifecycleOwner.lifecycle.addObserver(binding.mainAction)
+    }
 
+    private fun setOnboardingStatements() {
         binding.onboardingPager.adapter = OnboardingStatementsAdapter(
             fragment = this,
             titles = resources.getStringArray(R.array.titles),
-            descriptions = resources.getStringArray(R.array.descriptions))
+            descriptions = resources.getStringArray(R.array.descriptions)
+        )
 
-        binding.onboardingPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-
-        })
-        TabLayoutMediator(binding.tabLayout, binding.onboardingPager){tab, position -> }.attach()
+        TabLayoutMediator(binding.tabLayout, binding.onboardingPager) { _, _ -> }.attach()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

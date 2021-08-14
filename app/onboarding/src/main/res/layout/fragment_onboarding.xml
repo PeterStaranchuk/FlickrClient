@@ -83,14 +83,12 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.8" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.peterstaranchuk.onboarding.ui.onboarding.custom.MainActionButton
             android:id="@+id/main_action"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_marginBottom="32dp"
-            android:background="@drawable/shape_onboarding_main_button"
             android:text="@string/onboarding_main_button_text"
-            android:textColor="@color/onboarding_main_button_text_color"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/guideline_right"
             app:layout_constraintStart_toStartOf="@+id/guideline_left" />

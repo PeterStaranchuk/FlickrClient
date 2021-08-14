@@ -1,4 +1,4 @@
-package com.peterstaranchuk.onboarding.ui.onboarding
+package com.peterstaranchuk.onboarding.ui.onboarding.statements
 
 import android.content.res.Resources
 import android.os.Bundle

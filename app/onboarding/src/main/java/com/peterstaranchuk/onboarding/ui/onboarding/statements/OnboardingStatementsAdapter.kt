@@ -1,4 +1,4 @@
-package com.peterstaranchuk.onboarding.ui.onboarding
+package com.peterstaranchuk.onboarding.ui.onboarding.statements
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
