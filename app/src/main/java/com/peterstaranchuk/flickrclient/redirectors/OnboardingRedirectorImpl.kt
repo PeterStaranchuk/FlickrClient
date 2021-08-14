@@ -3,7 +3,7 @@ package com.peterstaranchuk.flickrclient.redirectors
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.peterstaranchuk.flickrclient.R
-import com.peterstaranchuk.onboarding.ui.onboarding.OnboardingRedirector
+import com.peterstaranchuk.onboarding.ui.onboarding.helpers.OnboardingRedirector
 
 class OnboardingRedirectorImpl : OnboardingRedirector {
 

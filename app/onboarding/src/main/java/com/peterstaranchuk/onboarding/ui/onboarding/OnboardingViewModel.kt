@@ -2,17 +2,19 @@ package com.peterstaranchuk.onboarding.ui.onboarding
 
 import androidx.lifecycle.viewModelScope
 import com.peterstaranchuk.common.BaseViewModel
+import com.peterstaranchuk.onboarding.ui.onboarding.helpers.OnboardingTimeRetriever
 import com.peterstaranchuk.onboarding.ui.onboarding.statements.OnboardingContract
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class OnboardingViewModel : BaseViewModel<OnboardingContract.Event>() {
+class OnboardingViewModel(private val timeRetriever: OnboardingTimeRetriever) : BaseViewModel<OnboardingContract.Event>() {
 
     fun onMainActionButtonClicked() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Main) {
             sendEvent(OnboardingContract.Event.EnableLoadingState)
 
-            delay(2000)
+            delay(timeRetriever.getDelayBeforeRedirect())
 
             sendEvent(OnboardingContract.Event.RedirectToAccountEnterScreen)
         }

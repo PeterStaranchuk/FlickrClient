@@ -1,4 +1,4 @@
-package com.peterstaranchuk.onboarding.ui.onboarding
+package com.peterstaranchuk.onboarding.ui.onboarding.helpers
 
 import androidx.fragment.app.Fragment
 
