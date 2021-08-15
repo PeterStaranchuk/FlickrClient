@@ -29,6 +29,7 @@ class MainActionButton : View, LifecycleObserver {
     private val loadingPurple by lazy { ContextCompat.getColor(context, R.color.flickr_purple) }
 
     private var textAlphaAnimator: ValueAnimator? = null
+    private var loadingAnimator: ValueAnimator? = null
     private var state = ButtonState.DEFAULT
     private var offset = 0f
     private var isReversePartOfAnimation = false
@@ -95,6 +96,7 @@ class MainActionButton : View, LifecycleObserver {
     var globalVisibleRect = Rect()
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun connectListener() {
+        loadingAnimator?.start()
         setOnTouchListener { _, event ->
             when (event?.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -126,6 +128,12 @@ class MainActionButton : View, LifecycleObserver {
         }
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    fun disconnectListener() {
+        loadingAnimator?.pause()
+        setOnTouchListener(null)
+    }
+
     private fun animateToDefaultTextState() {
         if(textAlphaAnimator?.isRunning == true) return //animation is already running. No need to cancel it and start the new one
 
@@ -140,14 +148,9 @@ class MainActionButton : View, LifecycleObserver {
         }
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    fun disconnectListener() {
-        setOnTouchListener(null)
-    }
-
     fun setLoadingState() {
         state = ButtonState.LOADING
-        ValueAnimator.ofFloat(0f, loadingCircleSize + loadingCircleMargin).apply {
+        loadingAnimator = ValueAnimator.ofFloat(0f, loadingCircleSize + loadingCircleMargin).apply {
             addUpdateListener {
                 offset = it.animatedValue as Float
                 postInvalidate()
@@ -158,13 +161,14 @@ class MainActionButton : View, LifecycleObserver {
             interpolator = AccelerateDecelerateInterpolator()
             repeatMode = ValueAnimator.RESTART
             repeatCount = ValueAnimator.INFINITE
-            duration = 1000
+            duration = 800
             start()
         }
-        postInvalidate()
+        invalidate()
     }
 
     fun setDefaultState() {
         state = ButtonState.DEFAULT
+        invalidate()
     }
 }

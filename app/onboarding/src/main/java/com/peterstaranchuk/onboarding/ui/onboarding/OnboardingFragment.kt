@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.google.android.material.tabs.TabLayoutMediator
+import com.peterstaranchuk.common.BaseFragment
 import com.peterstaranchuk.onboarding.R
 import com.peterstaranchuk.onboarding.databinding.FragmentOnboardingBinding
 import com.peterstaranchuk.onboarding.ui.onboarding.helpers.OnboardingRedirector
@@ -14,12 +15,14 @@ import com.peterstaranchuk.onboarding.ui.onboarding.statements.OnboardingStateme
 import org.koin.android.ext.android.inject
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
+import org.koin.core.module.Module
 
-class OnboardingFragment : Fragment() {
+class OnboardingFragment : BaseFragment() {
 
     private lateinit var binding: FragmentOnboardingBinding
     private val vm: OnboardingViewModel by inject()
     private val redirector : OnboardingRedirector by inject()
+    override val dependenciesModule = onboardingModule
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentOnboardingBinding.inflate(inflater, container, false)
@@ -50,15 +53,5 @@ class OnboardingFragment : Fragment() {
         )
 
         TabLayoutMediator(binding.tabLayout, binding.onboardingPager) { _, _ -> }.attach()
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        loadKoinModules(onboardingModule)
-    }
-
-    override fun onDestroy() {
-        unloadKoinModules(onboardingModule)
-        super.onDestroy()
     }
 }

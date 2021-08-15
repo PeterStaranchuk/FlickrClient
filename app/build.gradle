@@ -44,9 +44,6 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$app_compat_version"
     implementation "com.google.android.material:material:$material_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layour_version"
-    testImplementation "junit:junit:$junit_version"
-    androidTestImplementation "androidx.test.ext:junit:$ext_junit"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core"
 
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
@@ -55,4 +52,10 @@ dependencies {
     //dependency injection
     implementation "org.koin:koin-android:$rootProject.ext.koinVer"
     implementation "org.koin:koin-android-viewmodel:$rootProject.ext.koinVer"
+
+    //leak detection
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+
+    //Logs
+    implementation 'com.jakewharton.timber:timber:4.7.1'
 }

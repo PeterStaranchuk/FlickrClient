@@ -1,7 +1,9 @@
 package com.peterstaranchuk.flickrclient.di
 
+import com.peterstaranchuk.flickrclient.redirectors.AuthNavigatorImpl
 import com.peterstaranchuk.flickrclient.redirectors.OnboardingRedirectorImpl
 import com.peterstaranchuk.flickrclient.redirectors.SplashRedirectorImpl
+import com.peterstaranchuk.onboarding.ui.auth.AuthNavigator
 import com.peterstaranchuk.onboarding.ui.onboarding.helpers.OnboardingRedirector
 import com.peterstaranchuk.onboarding.ui.splash.SplashRedirector
 import org.koin.dsl.module
@@ -9,4 +11,5 @@ import org.koin.dsl.module
 val redirectorsModule = module {
     factory<SplashRedirector> { SplashRedirectorImpl() }
     factory<OnboardingRedirector> { OnboardingRedirectorImpl() }
+    factory<AuthNavigator> { AuthNavigatorImpl() }
 }

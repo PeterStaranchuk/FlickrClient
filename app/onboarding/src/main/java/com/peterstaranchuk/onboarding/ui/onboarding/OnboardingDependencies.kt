@@ -1,5 +1,7 @@
 package com.peterstaranchuk.onboarding.ui.onboarding
 
+import com.peterstaranchuk.onboarding.ui.auth.AuthInteractor
+import com.peterstaranchuk.onboarding.ui.auth.AuthInteractorImpl
 import com.peterstaranchuk.onboarding.ui.onboarding.helpers.OnboardingTimeRetriever
 import com.peterstaranchuk.onboarding.ui.onboarding.helpers.OnboardingTimeRetrieverImpl
 import org.koin.android.viewmodel.dsl.viewModel
