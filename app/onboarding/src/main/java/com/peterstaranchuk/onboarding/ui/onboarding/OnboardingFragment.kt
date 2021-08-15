@@ -6,12 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import com.google.android.material.tabs.TabLayoutMediator
 import com.peterstaranchuk.onboarding.R
 import com.peterstaranchuk.onboarding.databinding.FragmentOnboardingBinding
 import com.peterstaranchuk.onboarding.ui.onboarding.helpers.OnboardingRedirector
-import com.peterstaranchuk.onboarding.ui.onboarding.statements.OnboardingContract
 import com.peterstaranchuk.onboarding.ui.onboarding.statements.OnboardingStatementsAdapter
 import org.koin.android.ext.android.inject
 import org.koin.core.context.loadKoinModules
@@ -38,7 +36,6 @@ class OnboardingFragment : Fragment() {
                 when (event) {
                     OnboardingContract.Event.EnableLoadingState -> binding.mainAction.setLoadingState()
                     OnboardingContract.Event.RedirectToAccountEnterScreen -> {
-                        binding.mainAction.setDefaultState()
                         redirector.redirectToAuthScreen(this@OnboardingFragment)
                     }
                 }

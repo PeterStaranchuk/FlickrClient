@@ -3,7 +3,6 @@ package com.peterstaranchuk.onboarding.ui.onboarding
 import androidx.lifecycle.viewModelScope
 import com.peterstaranchuk.common.BaseViewModel
 import com.peterstaranchuk.onboarding.ui.onboarding.helpers.OnboardingTimeRetriever
-import com.peterstaranchuk.onboarding.ui.onboarding.statements.OnboardingContract
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
