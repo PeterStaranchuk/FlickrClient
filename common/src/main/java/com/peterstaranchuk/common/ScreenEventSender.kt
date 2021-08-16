@@ -3,6 +3,8 @@ package com.peterstaranchuk.common
 import androidx.lifecycle.LiveData
 import com.peterstaranchuk.common.redirectors.UiEvent
 
+//even though the presence of this "middle man" seems redundant
+//it provides the way to have 100% on testing of UI events (call order, called/not called etc)
 interface ScreenEventSender<E : UiEvent> {
     val event: LiveData<E>
     fun sendEvent(event: E)

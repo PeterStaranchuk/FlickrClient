@@ -19,7 +19,25 @@
             android:theme="@style/Theme.FlickrClient">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="authorization"
+                    android:scheme="oauth" />
+            </intent-filter>
+
+            <intent-filter android:label="oauth_filter">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "oauth://gizmos” -->
+                <data
+                    android:host="authorization"
+                    android:scheme="deeplink" />
             </intent-filter>
         </activity>
     </application>

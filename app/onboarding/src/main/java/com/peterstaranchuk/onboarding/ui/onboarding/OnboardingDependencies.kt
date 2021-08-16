@@ -10,7 +10,7 @@ import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val onboardingModule = module {
-    viewModel { OnboardingViewModel(get(), get()) }
+    viewModel { OnboardingViewModel(get(), get(), get()) }
     factory<OnboardingTimeRetriever> { OnboardingTimeRetrieverImpl() }
     factory<OnboardingInteractor> { OnboardingInteractorImpl() }
     factory<ScreenEventSender<OnboardingContract.Event>> { ScreenEventSenderImpl() }

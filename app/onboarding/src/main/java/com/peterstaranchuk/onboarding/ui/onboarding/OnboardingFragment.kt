@@ -1,11 +1,12 @@
 package com.peterstaranchuk.onboarding.ui.onboarding
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import com.peterstaranchuk.common.BaseFragment
 import com.peterstaranchuk.onboarding.R
@@ -13,9 +14,6 @@ import com.peterstaranchuk.onboarding.databinding.FragmentOnboardingBinding
 import com.peterstaranchuk.onboarding.ui.onboarding.helpers.OnboardingRedirector
 import com.peterstaranchuk.onboarding.ui.onboarding.statements.OnboardingStatementsAdapter
 import org.koin.android.ext.android.inject
-import org.koin.core.context.loadKoinModules
-import org.koin.core.context.unloadKoinModules
-import org.koin.core.module.Module
 
 class OnboardingFragment : BaseFragment() {
 
@@ -35,14 +33,26 @@ class OnboardingFragment : BaseFragment() {
         setOnboardingStatements()
         viewLifecycleOwner.lifecycle.addObserver(binding.mainAction)
 
-        vm.screenEvent.observe(viewLifecycleOwner, Observer { event ->
-                when (event) {
-                    OnboardingContract.Event.EnableLoadingState -> binding.mainAction.setLoadingState()
-                    OnboardingContract.Event.RedirectToAccountEnterScreen -> {
-                        redirector.redirectToAuthScreen(this@OnboardingFragment)
-                    }
-                }
-            })
+        vm.eventSender.event.observe(viewLifecycleOwner, { event ->
+            when (event) {
+                is OnboardingContract.Event.EnableLoadingState -> binding.mainAction.setLoadingState()
+                is OnboardingContract.Event.DisableLoadingState -> binding.mainAction.setDefaultState()
+                is OnboardingContract.Event.OpenAuthScreen -> openAuthScreen(event.authLink)
+                is OnboardingContract.Event.ShowGeneralError -> Snackbar.make(binding.root, getString(R.string.error_general), Snackbar.LENGTH_LONG).show()
+                is OnboardingContract.Event.ShowNoBrowserError -> Snackbar.make(binding.root, getString(R.string.error_no_browser), Snackbar.LENGTH_LONG).show()
+            }
+        })
+    }
+
+    private fun openAuthScreen(authLink: String) {
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse(authLink)
+        }
+        if (intent.resolveActivity(requireActivity().packageManager) != null) {
+            startActivity(intent)
+        } else {
+            vm.showNoBrowserError()
+        }
     }
 
     private fun setOnboardingStatements() {
