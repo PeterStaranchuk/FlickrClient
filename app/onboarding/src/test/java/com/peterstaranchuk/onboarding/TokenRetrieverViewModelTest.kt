@@ -75,4 +75,15 @@ class TokenRetrieverViewModelTest {
             interactor.saveToken("token")
         }
     }
+
+    @Test
+    fun should_redirect_user_to_the_main_screen_after_token_is_retrieved() = runBlockingTest {
+        coEvery { interactor.getToken("link") } returns flowOf("token")
+
+        vm.onAuthFinished("link")
+
+        coVerify {
+            eventSender.sendUiEvent(TokenRetrieverContract.Event.RedirectToMainScreen)
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.peterstaranchuk.onboarding.ui.token_retriever
 
+import com.peterstaranchuk.common.TokenStoreManager
 import com.peterstaranchuk.onboarding.ui.AuthService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -11,12 +12,12 @@ interface TokenRetrieverInteractor {
     fun provideAuthService(authService: AuthService)
 }
 
-class TokenRetrieverInteractorImpl : TokenRetrieverInteractor, KoinComponent {
+class TokenRetrieverInteractorImpl(private val tokenStoreManager: TokenStoreManager) : TokenRetrieverInteractor, KoinComponent {
 
     private lateinit var authService: AuthService
 
     override suspend fun saveToken(newToken: String) {
-        //todo save token
+        tokenStoreManager.saveToken(newToken)
     }
 
     override fun getToken(deeplink: String): Flow<String> {

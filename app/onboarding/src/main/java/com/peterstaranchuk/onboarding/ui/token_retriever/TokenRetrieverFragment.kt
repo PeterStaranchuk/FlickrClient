@@ -14,21 +14,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import com.peterstaranchuk.common.BaseFragment
+import com.peterstaranchuk.onboarding.ui.AuthDependency
 import com.peterstaranchuk.onboarding.ui.AuthService
+import com.peterstaranchuk.onboarding.ui.authModule
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.core.qualifier.named
 
 class TokenRetrieverFragment : BaseFragment() {
-    override val dependenciesModule = tokenRetrieverModule
+    override val dependenciesModule = listOf(tokenRetrieverModule, authModule)
 
     private val vm: TokenRetrieverViewModel by inject()
+    private val scope by lazy { getKoin().getOrCreateScope(AuthDependency.SCOPE_ID, named(AuthDependency.SCOPE_NAME)) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val scope = getKoin().getOrCreateScope("auth_scope_id", named("auth_scope"))
         val authService = scope.get<AuthService>()
         vm.provideAuthService(authService)
+    }
+
+    override fun onDestroy() {
+        scope.close()
+        super.onDestroy()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

@@ -6,6 +6,6 @@ class TokenRetrieverContract {
 
     sealed class Event : UiEvent {
         object RedirectToOnboarding : Event()
-
+        object RedirectToMainScreen : Event()
     }
 }
