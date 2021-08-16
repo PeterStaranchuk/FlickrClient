@@ -2,7 +2,7 @@ package com.peterstaranchuk.flickrclient
 
 import android.app.Application
 import com.peterstaranchuk.common.networkModule
-import com.peterstaranchuk.flickrclient.di.dispatchersModule
+import com.peterstaranchuk.flickrclient.di.coreModule
 import com.peterstaranchuk.flickrclient.di.redirectorsModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -15,7 +15,7 @@ class FlickrApplication : Application() {
 
         startKoin {
             androidContext(this@FlickrApplication)
-            modules(listOf(redirectorsModule, networkModule, dispatchersModule))
+            modules(listOf(redirectorsModule, networkModule, coreModule))
         }
 
         if(BuildConfig.DEBUG) {

@@ -10,7 +10,7 @@ import timber.log.Timber
 
 abstract class BaseFragment : Fragment() {
 
-    abstract val dependenciesModule : Module
+    abstract val dependenciesModule: List<Module>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
