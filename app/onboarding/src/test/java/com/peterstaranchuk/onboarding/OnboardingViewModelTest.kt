@@ -1,21 +1,23 @@
 package com.peterstaranchuk.onboarding
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.peterstaranchuk.common.getOrAwaitValue
-import com.peterstaranchuk.onboarding.ui.onboarding.OnboardingViewModel
-import com.peterstaranchuk.onboarding.ui.onboarding.helpers.OnboardingTimeRetriever
+import com.peterstaranchuk.common.ScreenEventSender
+import com.peterstaranchuk.onboarding.ui.auth.OnboardingInteractor
 import com.peterstaranchuk.onboarding.ui.onboarding.OnboardingContract
+import com.peterstaranchuk.onboarding.ui.onboarding.OnboardingViewModel
 import io.mockk.MockKAnnotations
-import io.mockk.every
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -26,7 +28,10 @@ class OnboardingViewModelTest {
     val instantExecutorRule = InstantTaskExecutorRule()
 
     @MockK
-    private lateinit var timeRetriever : OnboardingTimeRetriever
+    private lateinit var interactor: OnboardingInteractor
+
+    @MockK(relaxed = true)
+    private lateinit var eventSender: ScreenEventSender<OnboardingContract.Event>
 
     private val mainThreadSurrogate = newSingleThreadContext("UI thread")
 
@@ -36,7 +41,7 @@ class OnboardingViewModelTest {
     fun before() {
         MockKAnnotations.init(this)
         Dispatchers.setMain(mainThreadSurrogate)
-        vm = OnboardingViewModel(timeRetriever)
+        vm = OnboardingViewModel(interactor, eventSender)
     }
 
     @After
@@ -47,21 +52,57 @@ class OnboardingViewModelTest {
 
     @Test
     fun main_action_button_should_go_to_the_loading_state_when_clicked() = runBlocking {
-        every { timeRetriever.getDelayBeforeRedirect() } returns 2000
+        coEvery { interactor.getAuthUrl() } returns flow {}
 
         vm.onMainActionButtonClicked()
 
-        assertEquals(OnboardingContract.Event.EnableLoadingState, vm.screenEvent.getOrAwaitValue())
+        coVerify {
+            eventSender.sendEvent(OnboardingContract.Event.EnableLoadingState)
+        }
     }
 
     @Test
-    fun should_open_account_enter_screen_after_delay_when_main_action_button_clicked() = runBlocking {
-        every { timeRetriever.getDelayBeforeRedirect() } returns 50
+    fun should_open_account_enter_screen_when_main_action_button_clicked() = runBlocking {
+        coEvery { interactor.getAuthUrl() } returns flowOf("link")
 
         vm.onMainActionButtonClicked()
 
-        delay(150)
-        assertEquals(OnboardingContract.Event.RedirectToAccountEnterScreen, vm.screenEvent.value)
+        coVerify {
+            eventSender.sendEvent(OnboardingContract.Event.OpenAuthScreen("link"))
+        }
+    }
+
+    @Test
+    fun should_disable_loading_state_when_link_is_loaded() {
+        coEvery { interactor.getAuthUrl() } returns flowOf("link")
+
+        vm.onMainActionButtonClicked()
+
+        coVerify {
+            eventSender.sendEvent(OnboardingContract.Event.DisableLoadingState)
+        }
+    }
+
+    @Test
+    fun should_show_no_browser_error_when_user_has_no_browser() {
+        vm.showNoBrowserError()
+
+        coVerify {
+            eventSender.sendEvent(OnboardingContract.Event.ShowNoBrowserError)
+        }
+    }
+
+    @Test
+    fun should_show_error_if_app_cant_get_a_auth_link() {
+        coEvery { interactor.getAuthUrl() } returns flow {
+            throw RuntimeException("Something went wrong")
+        }
+
+        vm.onMainActionButtonClicked()
+
+        coVerify {
+            eventSender.sendEvent(OnboardingContract.Event.ShowGeneralError)
+        }
     }
 
 }
