@@ -1,33 +1,26 @@
 package com.peterstaranchuk.onboarding.ui.auth
 
-import com.github.scribejava.apis.FlickrApi
-import com.github.scribejava.core.builder.ServiceBuilder
-import com.peterstaranchuk.onboarding.BuildConfig
-import kotlinx.coroutines.Dispatchers
+import com.peterstaranchuk.onboarding.ui.AuthService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 
 interface OnboardingInteractor {
     fun getAuthUrl(): Flow<String>
+    fun provideAuthService(authService: AuthService)
 }
 
 class OnboardingInteractorImpl : OnboardingInteractor {
 
+    private lateinit var authService: AuthService
+
     override fun getAuthUrl(): Flow<String> {
         return flow {
-            val oauthCallback = "deeplink://authorization"
+            emit(authService.getAuthUrl())
+        }
+    }
 
-            val service = ServiceBuilder(BuildConfig.FLICKR_API_KEY)
-                .apiSecret(BuildConfig.FLICKR_API_SECRET)
-                .callback(oauthCallback)
-                .build(FlickrApi.instance(FlickrApi.FlickrPerm.DELETE));
-
-            val requestToken = service.requestToken;
-
-            val authorizationUrl = service.getAuthorizationUrl(requestToken);
-            emit(authorizationUrl)
-        }.flowOn(Dispatchers.IO)
+    override fun provideAuthService(authService: AuthService) {
+        this.authService = authService
     }
 
 }

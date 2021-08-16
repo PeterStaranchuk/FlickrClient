@@ -13,7 +13,7 @@ open class BaseViewModel<E : UiEvent>(val eventSender: ScreenEventSender<E>, val
 
     fun sendUiEvent(event: E) {
         viewModelScope.launch(dispatchers.main) {
-            eventSender.sendEvent(event)
+            eventSender.sendUiEvent(event)
         }
     }
 

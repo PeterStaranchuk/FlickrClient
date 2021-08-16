@@ -63,7 +63,7 @@ class OnboardingViewModelTest {
         vm.onMainActionButtonClicked()
 
         coVerify {
-            eventSender.sendEvent(OnboardingContract.Event.EnableLoadingState)
+            eventSender.sendUiEvent(OnboardingContract.Event.EnableLoadingState)
         }
     }
 
@@ -74,7 +74,7 @@ class OnboardingViewModelTest {
         vm.onMainActionButtonClicked()
 
         coVerify {
-            eventSender.sendEvent(OnboardingContract.Event.OpenAuthScreen("link"))
+            eventSender.sendUiEvent(OnboardingContract.Event.OpenAuthScreen("link"))
         }
     }
 
@@ -85,7 +85,7 @@ class OnboardingViewModelTest {
         vm.onMainActionButtonClicked()
 
         coVerify {
-            eventSender.sendEvent(OnboardingContract.Event.DisableLoadingState)
+            eventSender.sendUiEvent(OnboardingContract.Event.DisableLoadingState)
         }
     }
 
@@ -94,7 +94,7 @@ class OnboardingViewModelTest {
         vm.showNoBrowserError()
 
         coVerify {
-            eventSender.sendEvent(OnboardingContract.Event.ShowNoBrowserError)
+            eventSender.sendUiEvent(OnboardingContract.Event.ShowNoBrowserError)
         }
     }
 
@@ -103,7 +103,7 @@ class OnboardingViewModelTest {
         vm.showNoBrowserError()
 
         coVerify {
-            eventSender.sendEvent(OnboardingContract.Event.DisableLoadingState)
+            eventSender.sendUiEvent(OnboardingContract.Event.DisableLoadingState)
         }
     }
 
@@ -117,7 +117,7 @@ class OnboardingViewModelTest {
         vm.onMainActionButtonClicked()
 
         coVerify {
-            eventSender.sendEvent(OnboardingContract.Event.DisableLoadingState)
+            eventSender.sendUiEvent(OnboardingContract.Event.DisableLoadingState)
         }
     }
 
@@ -130,7 +130,7 @@ class OnboardingViewModelTest {
         vm.onMainActionButtonClicked()
 
         coVerify {
-            eventSender.sendEvent(OnboardingContract.Event.ShowGeneralError)
+            eventSender.sendUiEvent(OnboardingContract.Event.ShowGeneralError)
         }
     }
 }

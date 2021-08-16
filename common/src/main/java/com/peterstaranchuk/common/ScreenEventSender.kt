@@ -7,7 +7,7 @@ import com.peterstaranchuk.common.redirectors.UiEvent
 //it provides the way to have 100% on testing of UI events (call order, called/not called etc)
 interface ScreenEventSender<E : UiEvent> {
     val event: LiveData<E>
-    fun sendEvent(event: E)
+    fun sendUiEvent(event: E)
 }
 
 class ScreenEventSenderImpl<E : UiEvent> : ScreenEventSender<E> {
@@ -15,7 +15,7 @@ class ScreenEventSenderImpl<E : UiEvent> : ScreenEventSender<E> {
 
     override val event : LiveData<E> = _screenEvent
 
-    override fun sendEvent(event: E) {
+    override fun sendUiEvent(event: E) {
         _screenEvent.value = event
     }
 

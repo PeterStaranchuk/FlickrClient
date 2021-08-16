@@ -73,9 +73,6 @@ dependencies {
     testImplementation 'android.arch.core:core-testing:1.1.1'
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$rootProject.ext.coroutinesVersion"
 
-    //lifecycle
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
-
     //coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.ext.coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.ext.coroutinesVersion"

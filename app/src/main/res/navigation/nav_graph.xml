@@ -18,18 +18,15 @@
     <fragment
         android:id="@+id/onboardingFragment"
         android:name="com.peterstaranchuk.onboarding.ui.onboarding.OnboardingFragment"
-        android:label="OnboardingFragment" >
-        <action
-            android:id="@+id/action_onboardingFragment_to_authFragment"
-            app:destination="@id/authFragment"
-            app:enterAnim="@android:anim/fade_in" />
-    </fragment>
+        android:label="OnboardingFragment" />
     <fragment
-        android:id="@+id/authFragment"
-        android:name="com.peterstaranchuk.onboarding.ui.auth.AuthFragment"
-        android:label="AuthFragment">
+        android:id="@+id/tokenRetrieverFragment"
+        android:name="com.peterstaranchuk.onboarding.ui.token_retriever.TokenRetrieverFragment"
+        android:label="TokenRetrieverFragment">
+
         <deepLink
             android:id="@+id/authLink"
             app:uri="deeplink://authorization?oauth_token={token}&amp;oauth_verifier={verifier}" />
     </fragment>
+
 </navigation>
