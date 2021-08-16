@@ -11,6 +11,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.peterstaranchuk.common.BaseFragment
 import com.peterstaranchuk.onboarding.R
 import com.peterstaranchuk.onboarding.databinding.FragmentOnboardingBinding
+import com.peterstaranchuk.onboarding.ui.AuthDependency
 import com.peterstaranchuk.onboarding.ui.AuthService
 import com.peterstaranchuk.onboarding.ui.authModule
 import com.peterstaranchuk.onboarding.ui.onboarding.helpers.OnboardingRedirector
@@ -25,7 +26,7 @@ class OnboardingFragment : BaseFragment() {
     private lateinit var binding: FragmentOnboardingBinding
     private val vm: OnboardingViewModel by inject()
     private val redirector: OnboardingRedirector by inject()
-    override val dependenciesModule = onboardingModule
+    override val dependenciesModule = listOf(onboardingModule, authModule)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentOnboardingBinding.inflate(inflater, container, false)
@@ -36,7 +37,7 @@ class OnboardingFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loadKoinModules(authModule)
-        val scope = getKoin().getOrCreateScope("auth_scope_id", named("auth_scope"))
+        val scope = getKoin().getOrCreateScope(AuthDependency.SCOPE_ID, named(AuthDependency.SCOPE_NAME))
         val authService = scope.get<AuthService>()
         vm.provideAuthService(authService)
     }

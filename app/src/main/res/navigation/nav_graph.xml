@@ -27,6 +27,9 @@
         <deepLink
             android:id="@+id/authLink"
             app:uri="deeplink://authorization?oauth_token={token}&amp;oauth_verifier={verifier}" />
+        <action
+            android:id="@+id/action_tokenRetrieverFragment_to_onboardingFragment"
+            app:destination="@id/onboardingFragment" />
     </fragment>
 
 </navigation>

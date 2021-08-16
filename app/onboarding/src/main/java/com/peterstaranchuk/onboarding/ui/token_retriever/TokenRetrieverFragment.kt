@@ -24,6 +24,7 @@ import org.koin.core.qualifier.named
 class TokenRetrieverFragment : BaseFragment() {
     override val dependenciesModule = listOf(tokenRetrieverModule, authModule)
 
+    private val redirector: TokenRetrieverRedirector by inject()
     private val vm: TokenRetrieverViewModel by inject()
     private val scope by lazy { getKoin().getOrCreateScope(AuthDependency.SCOPE_ID, named(AuthDependency.SCOPE_NAME)) }
 
@@ -49,6 +50,13 @@ class TokenRetrieverFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         vm.onAuthFinished(activity?.intent?.dataString.toString())
+
+        vm.eventSender.event.observe(viewLifecycleOwner, {
+            when (it) {
+                TokenRetrieverContract.Event.RedirectToMainScreen -> redirector.redirectToMainScreen(this)
+                TokenRetrieverContract.Event.RedirectToOnboarding -> redirector.redirectToOnboarding(this)
+            }
+        })
     }
 
     @Composable
